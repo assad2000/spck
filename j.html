@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    
+    body {
+      position: relative;
+      width: 360px;
+      height: 650px;
+    }
+    
+    .a {
+      width: 100%;
+      height: 200px;
+      background: #3a5;
+      transition: opacity 0.5s ease;
+    }
+    
+    h1 {
+      height: 15px;
+      width: 100%;
+      background: #7e2;
+    }
+    .b {
+      width: 100%;
+      height: 650px;
+    }
+    .c {
+      position: absolute;
+      width: 100%;
+      height: 200px;
+      top: 0;
+      background: blueviolet;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="a"><h1>al time s</h1></div>
+  <div class="b"></div>
+  <div class="c"></div>
+
+  <script>
+    var previousScrollY = 0;
+    var isScrolling = false;
+
+    function smoothScrollTo(targetY, duration) {
+      if (isScrolling) return;
+
+      var startY = window.scrollY;
+      var currentTime = 0;
+      var increment = 20;
+
+      var animateScroll = function() {
+        currentTime += increment;
+        var easing = Math.easeInOutQuad(currentTime, startY, targetY - startY, duration);
+        window.scrollTo(0, easing);
+        if (currentTime < duration) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          isScrolling = false;
+        }
+      };
+
+      isScrolling = true;
+      animateScroll();
+    }
+
+    Math.easeInOutQuad = function (t, b, c, d) {
+      t /= d/2;
+      if (t < 1) return c/2*t*t + b;
+      t--;
+      return -c/2 * (t*(t-2) - 1) + b;
+    };
+/*
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+
+      if (scrollY < 180) {
+        var opacity = 1 - (scrollY / 180);
+        document.querySelector('.a').style.opacity = opacity;
+      }
+      
+      if (scrollY < previousScrollY && scrollY > 0 && scrollY <= 15) {
+        smoothScrollTo(0, 100);
+      } else if (scrollY > previousScrollY && scrollY > 15 && scrollY < 100) {
+        smoothScrollTo(200, 1000);
+      } else if (scrollY < previousScrollY && scrollY > 100 && scrollY < 180) {
+        smoothScrollTo(0, 1000);
+      } else if (scrollY > previousScrollY && scrollY >= 180 && scrollY < 200) {
+        smoothScrollTo(200, 100);
+      }
+
+      previousScrollY = scrollY;
+    });*/
+    
+    var isScrolling = true;
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+      
+      if (scrollY < 180) {
+        var opacity = 1 - (scrollY / 180);
+        document.querySelector('.a').style.opacity = opacity;
+      }
+      
+      if (isScrolling) {
+        if (scrollY < previousScrollY && scrollY > 0 && scrollY <= 15) {
+          isScrolling = false;
+        } else if (scrollY > previousScrollY && scrollY > 15 && scrollY < 100) {
+          isScrolling = false;
+        } else if (scrollY < previousScrollY && scrollY > 100 && scrollY < 180) {
+          isScrolling = false;
+        } else if (scrollY > previousScrollY && scrollY >= 180 && scrollY < 200) {
+          isScrolling = false;
+        }
+      }
+    previousScrollY = scrollY;
+    });
+    window.addEventListener('touchend', function() {
+      isScrolling = true;
+    });
+
+  </script>
+</body>
+</html>

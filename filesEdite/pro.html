@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shared Files</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      *{
+
+  margin: 0;
+
+  padding: 0;
+}
+body {
+  background: #ffffff;
+  color: #000000;
+}
+.dark-mode {
+  background: #000000;
+  color: #ffffff;
+}
+#checkbox {
+    display: none;
+}
+#checkbox ~ label {
+    margin: 10px;
+    width: 60px;
+    height: 30px;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 99;
+    background-color: #292828;
+    border: solid #f2eee3 2px;
+    cursor: pointer;
+    user-select: none;
+    transition: .8s;
+}
+#checkbox ~ label::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    top: 0;
+    left: 0;
+    background: #fff;
+    transform: scale(1.1);
+    transition: .8s;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+#checkbox:checked ~ label:before {
+    left: 30px;
+}
+#checkbox:checked ~ .page {
+    background-color: #292828;
+}
+#checkbox:checked ~ label {
+    background-color: #f2eee3;
+    color: #292828;
+    border-color: #454242;
+}
+
+#cont{
+  padding: 5px 10px 5px 10px;
+  background: #ffcffd;
+}
+h1 {
+  height: 48px;
+  background: red;
+  border-bottom: 3px grey solid;
+  text-align: right;
+}
+ul {
+  background: yellow;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+li {
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  background: red;
+  height: 100px;
+  min-width: 80px;
+  margin: 2px;
+}
+a {
+  width: 100%;
+  text-align: center;
+  background: blue;
+  color: #fff;
+  text-decoration: none;
+  margin: 2px;
+}
+span {
+  padding-left: 5%;
+}
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="checkbox" onclick="dm()">
+    <label for="checkbox"></label>
+    <h1>Shared Files</h1>
+    <span></span>
+    <div id="cont"><ul id="fileList"></ul></div>
+      <a href=".." style="display: block; margin-top: 20px;">Back</a>
+    <script>
+      function dm() {
+  const body = document.querySelector('body');
+  body.classList.toggle('dark-mode');
+}
+
+
+  
+  
+dir = 'http://localhost:3000/';
+//dir = '/';
+odir = '';
+
+
+
+function file(dir,odir) {
+  
+  
+  h = document.querySelector('span');
+  h.textContent = `${dir}`;
+  
+  
+  fetch(dir)
+    .then(response => response.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const html = parser.parseFromString(data, 'text/html');
+      const files = Array.from(html.getElementsByTagName('a'));
+      const fileListElement = document.getElementById('fileList');
+      fileListElement.innerHTML = ''; // يتم مسح القائمة الحالية
+      let i = 0;
+      
+      files.forEach(file => {
+        const fileName = decodeURIComponent(file.href.split(dir).pop());
+        i++;
+        //console.log(fileName);
+  
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        const local = 'http://localhost:3000/';
+        console.log('dir '+dir);
+        console.log('dir local '+local+dir);
+        console.log('odir '+odir);
+        if (fileName == local || fileName == dir || fileName == odir) {
+          link.textContent = 'Home';
+          link.addEventListener('click', function() {
+            home();
+          })
+        }else if (fileName.includes('.')) {
+          link.href = dir + fileName;
+          link.textContent = fileName;
+          link.download = fileName;
+        } else if (!fileName.includes('.')) {
+          link.textContent = fileName;
+          link.addEventListener('click', function() {
+            folder(fileName);
+          });
+        }
+        
+        listItem.addEventListener("click", ()=>{
+          link.click();
+          
+        });
+
+        listItem.appendChild(link);
+        fileListElement.appendChild(listItem);
+        
+        function folder(nameFolder) {
+          fred(dir + nameFolder,dir);
+        }
+      });
+    });
+}
+
+
+
+
+function home () {
+  file('http://localhost:3000/');
+}
+
+
+function fred(link,odir) {
+  file(link,odir);
+}
+
+function test() {
+  
+}
+file(dir,odir);
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>هاتف A</title>
+</head>
+<body>
+  <h1>هاتف A</h1>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.3.2/peerjs.min.js"></script>
+  <script>
+    const customIdA = 'c7cfd986-0aaf-4548-983f-85b2090de14c'; // قم بتحديد معرف مخصص لهاتف A
+    const peerA = new Peer(customIdA);
+
+    peerA.on('open', (id) => {
+      console.log(`معرف الهاتف A: ${id}`);
+    });
+
+    // عند الاتصال بـ "هاتف B"
+    const dataConnection = peerA.connect('4e03d924-8acb-421f-9a55-ad2bd00389d8'); // استبدل 'هاتف_B_ID' بمعرف هاتف B
+
+    dataConnection.on('open', () => {
+      dataConnection.send('hy');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+*{
+  padding: 0;
+  margin: 0;
+  
+}
+.winner {
+  display: none;
+  position: absolute;
+  top: 200px;
+  left: 30px;
+  border-radius: 5px;
+  background: #acabad;
+  height: 200px;
+  width: 300px;
+}
+.winner > p {
+  width: 300px;
+  font-size: 32px;
+  text-align: center;
+  border-bottom: solid gray 2px;
+}
+.players {
+  height: 200px;
+  width: 360px;
+  display: flex;
+  justify-content: space-evenly;
+  place-items: center;
+}
+.players > div {
+  color: red;
+  width: 100px;
+  height: 130px;
+  border: solid 2px black;
+  border-radius: 5px;
+  font-size: 92px;
+  text-align: center;
+}
+.players > div:nth-child(2) {
+  color: green;
+}
+.tab {
+  width: 360px;
+  height: 360px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tab > div {
+  text-align: center;
+  width: 32%;
+  height: 32%;
+  border: 2.6px solid grey;
+  background: #fff;
+}
